@@ -1,0 +1,5 @@
+.gitignore
+.terraform-docs.yml
+.terraform-docs.md
+.pre-commit-config.yml
+examples/*
