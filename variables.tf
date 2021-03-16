@@ -60,7 +60,7 @@ variable "max_session_duration" {
 
 variable "permissions_boundary" {
   type        = string
-  default     = null
+  default     = ""
   description = "The ARN of the policy that is used to set the permissions boundary for the role"
 }
 

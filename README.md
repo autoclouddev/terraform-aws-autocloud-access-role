@@ -26,7 +26,7 @@ Refer to the "my account" section of the application or contact your account rep
 | include_security_audit | Whether or not to add the AWS predefined SecurityAudit policy to the IAM role | `bool` | `true` | no |
 | max_session_duration | The maximum session duration (in seconds) that you want to set for the role | `number` | `3600` | no |
 | path | Path of the IAM role | `string` | `"/"` | no |
-| permissions_boundary | The ARN of the policy that is used to set the permissions boundary for the role | `string` | `null` | no |
+| permissions_boundary | The ARN of the policy that is used to set the permissions boundary for the role | `string` | `""` | no |
 | tags | Key-value map of tags for the IAM role | `map(string)` | `{}` | no |
 
 #### Outputs

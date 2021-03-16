@@ -75,7 +75,7 @@ resource "aws_iam_role" "autocloud_access_role" {
   assume_role_policy    = data.aws_iam_policy_document.autocloud_access_role_assume_policy[0].json
   force_detach_policies = var.force_detach_policies
   max_session_duration  = var.max_session_duration
-  permissions_boundary  = var.permissions_boundary
+  permissions_boundary  = var.permissions_boundary != "" ? var.permissions_boundary : null
 
   tags = var.tags
 }
