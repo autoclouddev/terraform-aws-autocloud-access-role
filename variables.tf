@@ -1,5 +1,5 @@
 variable "autocloud_organization_id" {
-  type        = "string"
+  type        = string
   description = "AutoCloud organization ID"
 }
 
