@@ -1,6 +1,7 @@
 variable "autocloud_organization_id" {
   type        = string
   description = "AutoCloud organization ID"
+  sensitive   = true
 }
 
 variable "include_read_only" {

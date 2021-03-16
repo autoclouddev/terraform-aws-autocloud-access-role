@@ -41,4 +41,3 @@ Refer to the "my account" section of the application or contact your account rep
 | name | The name of the role |
 | policy_arns | A list of ARNs for the policies attached to the role |
 | unique_id | The stable and unique string identifying the role |
-
