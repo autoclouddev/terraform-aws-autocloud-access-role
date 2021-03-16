@@ -85,8 +85,8 @@ resource "aws_iam_role" "autocloud_access_role" {
 # 
 # Attach all given the policies with the IAM role
 resource "aws_iam_role_policy_attachment" "autocloud_access_role_policy_attachments" {
-  for_each = var.enabled == true ? local.iam_policies : []
+  for_each = var.enabled == true ? toset(local.iam_policies) : []
 
-  role       = data.aws_iam_policy_document.autocloud_access_role_assume_policy[0].json
+  role       = aws_iam_role.autocloud_access_role[0].name
   policy_arn = each.value
 }
