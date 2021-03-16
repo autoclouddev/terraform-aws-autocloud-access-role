@@ -21,10 +21,10 @@ locals {
   iam_policies = concat(
     # Include AWS predefined ReadOnly policy?
 
-    var.include_read_only == true ? [] : [],
+    var.include_read_only == true ? ["arn:aws:iam::aws:policy/ReadOnlyAccess"] : [],
 
     # Include AWS predefined SecurityAudit policy?
-    var.include_security_audit == true ? [] : [],
+    var.include_security_audit == true ? ["arn:aws:iam::aws:policy/SecurityAudit"] : [],
 
     # Add additional user-specified IAM policy ARNs to attach to this role
     var.additional_policy_arns
