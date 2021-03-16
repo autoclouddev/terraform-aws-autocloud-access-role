@@ -1,13 +1,13 @@
 AutoCloud AWS Access Role Module
 ================================
 
-## Overview
+### Overview
 
-This module provisions an AWS IAM Role granting cross account read-only access rights for [AutoCloud](https://autocloud.dev)'s services  
-to ingest your infrastructure. Refer to the "my account" section of the application or contact your account represetative to obtain the  
-AutoCloud organization ID for your account.
+This module provisions an AWS IAM Role granting cross account read-only access rights for [AutoCloud](https://autocloud.dev)'s services to ingest your infrastructure.
 
-### Assets created:
+Refer to the "my account" section of the application or contact your account represetative to obtain the AutoCloud organization ID for your account.
+
+#### Assets created:
 
 * aws_iam_role - The AWS IAM cross-account role
 * aws_iam_role_policy_attachment - Several AWS IAM policy role attachments linking the cross-account role to the specific permissions allotted
