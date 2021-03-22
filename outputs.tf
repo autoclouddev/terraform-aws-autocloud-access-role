@@ -36,6 +36,5 @@ output "policy_arns" {
 output "external_id" {
   description = "External ID for the role"
   value       = local.external_id
-  sensitive   = true
 }
 
