@@ -108,7 +108,7 @@ resource "aws_iam_policy" "autocloud_access_role_policies" {
   # For this reason, the policies created use wildcard permissions.
   #
   # tfsec:ignore:aws-iam-no-policy-wildcards
-  policy = file(local.iam_policies[count.index])
+  policy = file(join("/", [path.module, local.iam_policies[count.index]]))
 
   description = format("Policy for %s", aws_iam_role.autocloud_access_role[0].name)
 
