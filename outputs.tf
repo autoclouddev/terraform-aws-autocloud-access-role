@@ -31,7 +31,7 @@ output "name" {
 
 output "policy_arns" {
   description = "A list of ARNs for the policies attached to the role"
-  value       = join("", [for policy in aws_iam_policy.this : policy.arn])
+  value       = [for policy in aws_iam_policy.this : policy.arn]
 }
 
 output "unique_id" {
