@@ -13,6 +13,12 @@ output "description" {
   value       = join("", aws_iam_role.autocloud_access_role[*].description)
 }
 
+output "external_id" {
+  description = "External ID for the role"
+  value       = local.external_id
+  sensitive   = true
+}
+
 output "id" {
   description = "The name of the role"
   value       = join("", aws_iam_role.autocloud_access_role[*].id)
@@ -23,18 +29,12 @@ output "name" {
   value       = join("", aws_iam_role.autocloud_access_role[*].name)
 }
 
+output "policy_arns" {
+  description = "A list of ARNs for the policies attached to the role"
+  value       = join("", [for policy in aws_iam_policy.this : policy.arn])
+}
+
 output "unique_id" {
   description = "The stable and unique string identifying the role"
   value       = join("", aws_iam_role.autocloud_access_role[*].unique_id)
 }
-
-output "policy_arns" {
-  description = "A list of ARNs for the policies attached to the role"
-  value       = local.iam_policies
-}
-
-output "external_id" {
-  description = "External ID for the role"
-  value       = local.external_id
-}
-

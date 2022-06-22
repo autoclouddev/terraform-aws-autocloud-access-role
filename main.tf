@@ -2,11 +2,17 @@ locals {
   ###
   # AutoCloud AWS Account IDs
   # 
-  # AWS Accounts where AutoCloud tooling runs, and where cross-account access will originate from
+  # AWS Accounts where AutoCloud tooling runs, and where cross-account access will originate from by default
   autocloud_accounts = [
     "204762158545",
     "824781544411"
   ]
+
+  ###
+  # Trusted AWS Account IDs
+  #
+  # AWS Accounts where cross-account access will originate, either the set of accounts if provided or AutoCloud's SaaS accounts by defatul
+  trusted_accounts = length(var.trusted_accounts) > 0 ? var.trusted_accounts : local.autocloud_accounts
 
   ###
   # External ID
@@ -18,17 +24,16 @@ locals {
   # IAM Policies
   # 
   # Select the IAM policies this cross-account role will have
-  iam_policies = concat(
-    # Include AWS predefined ReadOnly policy?
+  #
+  # To avoid apply time constraints, the files listed here must be manually reconciled with contents of templates directory
+  iam_policies = [
+    "templates/iam/policy_1.json",
+    "templates/iam/policy_2.json",
+    "templates/iam/policy_3.json",
+    "templates/iam/policy_4.json"
+  ]
 
-    var.include_read_only == true ? ["arn:aws:iam::aws:policy/ReadOnlyAccess"] : [],
-
-    # Include AWS predefined SecurityAudit policy?
-    var.include_security_audit == true ? ["arn:aws:iam::aws:policy/SecurityAudit"] : [],
-
-    # Add additional user-specified IAM policy ARNs to attach to this role
-    var.additional_policy_arns
-  )
+  iam_policy_arns = var.enabled != true ? [] : concat(aws_iam_policy.this[*].arn, var.additional_policy_arns)
 }
 
 ###
@@ -45,7 +50,7 @@ data "aws_iam_policy_document" "autocloud_access_role_assume_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = local.autocloud_accounts
+      identifiers = local.trusted_accounts
     }
 
     condition {
@@ -81,12 +86,49 @@ resource "aws_iam_role" "autocloud_access_role" {
 }
 
 ###
+# IAM Policies
+#
+# Create IAM policy documents from policy templates
+resource "aws_iam_policy" "this" {
+  count = var.enabled != true ? 0 : length(local.iam_policies)
+
+  name = join(
+    var.policy_name_delimiter,
+    concat(
+      [aws_iam_role.autocloud_access_role[0].name],
+      [
+        for element in split("_", split(".", basename(local.iam_policies[count.index]))[0]) :
+        var.policy_name_capitalize ? title(element) : element
+      ]
+    )
+  )
+
+  ###
+  # AutoCloud explicitly needs access to all resources to properly inventory and analyze them.
+  # For this reason, the policies created use wildcard permissions.
+  #
+  # tfsec:ignore:aws-iam-no-policy-wildcards
+  policy = file(local.iam_policies[count.index])
+
+  description = format("Policy for %s", aws_iam_role.autocloud_access_role[0].name)
+
+  tags = var.tags
+
+  # IAM objects take time to propagate. This leads to subtle eventual consistency bugs where dependent resources cannot be
+  # provisioned because the IAM object does not exist. We add a 30 second wait here to give the IAM object a chance to
+  # propagate within AWS.
+  provisioner "local-exec" {
+    command = "echo 'Sleeping for 30 seconds to wait for IAM object to be created'; sleep 30"
+  }
+}
+
+###
 # IAM Policy Attachments
 # 
 # Attach all given the policies with the IAM role
 resource "aws_iam_role_policy_attachment" "autocloud_access_role_policy_attachments" {
-  for_each = var.enabled == true ? toset(local.iam_policies) : []
+  count = var.enabled != true ? 0 : length(local.iam_policy_arns)
 
   role       = aws_iam_role.autocloud_access_role[0].name
-  policy_arn = each.value
+  policy_arn = local.iam_policy_arns[count.index]
 }
