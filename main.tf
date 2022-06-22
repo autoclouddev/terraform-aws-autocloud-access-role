@@ -33,7 +33,7 @@ locals {
     "templates/iam/policy_4.json"
   ]
 
-  iam_policy_arns = var.enabled != true ? [] : concat(aws_iam_policy.this[*].arn, var.additional_policy_arns)
+  iam_policy_arns = var.enabled != true ? [] : concat(aws_iam_policy.autocloud_access_role_policies[*].arn, var.additional_policy_arns)
 }
 
 ###
@@ -89,7 +89,7 @@ resource "aws_iam_role" "autocloud_access_role" {
 # IAM Policies
 #
 # Create IAM policy documents from policy templates
-resource "aws_iam_policy" "this" {
+resource "aws_iam_policy" "autocloud_access_role_policies" {
   count = var.enabled != true ? 0 : length(local.iam_policies)
 
   name = join(
