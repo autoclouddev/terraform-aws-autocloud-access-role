@@ -1,18 +1,31 @@
+---
 formatter: markdown table
-header-from: .terraform-docs.md
+header-from: ./docs/header.md
+output:
+  file: ./README.md
 sections:
-  hide-all: true
   show:
+    - data-sources
     - header
+    - footer
     - inputs
+    - modules
     - outputs
+    - providers
+    - requirements
+    - resources
 sort:
   enabled: true
-  by:
-    - required
+  by: required
 settings:
-  indent: 4
-  escape: false
+  anchor: true
   color: true
+  default: true
+  description: true
+  escape: false
+  html: true
+  indent: 4
+  lockfile: true
   required: true
   sensitive: true
+  type: true
