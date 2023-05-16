@@ -72,7 +72,6 @@
                 "aws-marketplace:List*",
                 "aws-marketplace:MeterUsage",
                 "aws-marketplace:View*",
-                "aws-portal:View*",
                 "awsconnector:Get*",
                 "backup-gateway:List*",
                 "backup:Describe*",
