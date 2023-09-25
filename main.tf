@@ -30,7 +30,6 @@ locals {
     "templates/iam/policy_2.json",
     "templates/iam/policy_3.json",
     "templates/iam/policy_4.json",
-    "templates/iam/policy_5.json"
   ]
 
   iam_policy_arns = var.enabled != true ? [] : concat(aws_iam_policy.autocloud_access_role_policies[*].arn, var.additional_policy_arns)
